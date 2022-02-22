@@ -118,7 +118,7 @@ export default () => {
         const sitAction = localPlayer.getAction('sit');
         if (sitAction) {
           localPlayer.removeAction('sit');
-          // localPlayer.avatar.app.visible = true;
+          localPlayer.avatar.app.visible = true;
           physics.setCharacterControllerPosition(localPlayer.characterController, app.position);
           sitSpec = null;
         }
@@ -154,23 +154,21 @@ export default () => {
         );
         physicsIds.push(physicsId);
 
+        app.updateMatrixWorld()
+        app.physicsObjects[0].position.copy(app.position)
+        // app.physicsObjects[0].rotation.copy(app.rotation)
+        // app.physicsObjects[0].quaternion.copy(app.quaternion)
+        // app.physicsObjects[0].scale.copy(app.scale)
+        // app.physicsObjects[0].rotation.set(0,0,0)
+        physicsManager.setTransform(app.physicsObjects[0])
+
     });
 
     useFrame(( { timeDiff } ) => {
       if(window.isDebug) debugger
 
-      if(window.app){
-        app.updateMatrixWorld();
-        if(window.heli?.physicsObjects[0]){
-          heli.physicsObjects[0].position.copy(heli.position)
-          heli.physicsObjects[0].rotation.copy(heli.rotation)
-          heli.physicsObjects[0].quaternion.copy(heli.quaternion)
-          heli.physicsObjects[0].scale.copy(heli.scale)
-          physicsManager.setTransform(heli.physicsObjects[0])
-        }
-      }
-
       const _updateRide = () => {
+      // debugger
       if (sitSpec && localPlayer.avatar) {
         const {instanceId} = app;
         const localPlayer = useLocalPlayer();
@@ -179,7 +177,7 @@ export default () => {
           if(sitSpec.mountType === "flying") {
             vehicle = app.physicsObjects[0];
             window.vehicle = vehicle;
-            // localPlayer.avatar.app.visible = false;
+            localPlayer.avatar.app.visible = false;
             // physics.enablePhysicsObject(vehicle);
             physics.enableGeometry(vehicle);
             let quat = new THREE.Quaternion(vehicle.quaternion.x, vehicle.quaternion.y, vehicle.quaternion.z, vehicle.quaternion.w);
@@ -278,6 +276,7 @@ export default () => {
             angularVelocity.z *= 0.97;
 
             //Applying velocities
+            // console.log(velocity.y);
             physics.setVelocity(vehicle, velocity, false);
             physics.setAngularVelocity(vehicle, angularVelocity, false);
 
@@ -285,6 +284,7 @@ export default () => {
             vehicle.updateMatrixWorld();
             app.position.copy(vehicle.position);
             app.quaternion.copy(vehicle.quaternion);
+            // app.matrix.copy(vehicle.matrix);
             app.updateMatrixWorld();
 
             if (rotor) { rotor.rotateZ(enginePower * 10); }
@@ -298,6 +298,9 @@ export default () => {
 
     useActivate(() => {
       if(window.isDebug) debugger
+
+      app.physicsObjects[0].rotation.set(0,0,0)
+      physicsManager.setTransform(app.physicsObjects[0])
 
       sitSpec = app.getComponent('sit');
       if (sitSpec) {
