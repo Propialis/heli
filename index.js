@@ -161,7 +161,7 @@ export default () => {
 
       if(window.app){
         app.updateMatrixWorld();
-        if(window.heli){
+        if(window.heli?.physicsObjects[0]){
           heli.physicsObjects[0].position.copy(heli.position)
           heli.physicsObjects[0].rotation.copy(heli.rotation)
           heli.physicsObjects[0].quaternion.copy(heli.quaternion)
@@ -181,7 +181,7 @@ export default () => {
             window.vehicle = vehicle;
             // localPlayer.avatar.app.visible = false;
             // physics.enablePhysicsObject(vehicle);
-            physics.enableGeometry(vehicle.physicsId);
+            physics.enableGeometry(vehicle);
             let quat = new THREE.Quaternion(vehicle.quaternion.x, vehicle.quaternion.y, vehicle.quaternion.z, vehicle.quaternion.w);
             let right = new THREE.Vector3(1, 0, 0).applyQuaternion(quat);
             let globalUp = new THREE.Vector3(0, 1, 0);
