@@ -16,12 +16,16 @@ const localQuaternion2 = new THREE.Quaternion();
 const localQuaternion3 = new THREE.Quaternion();
 const localEuler = new THREE.Euler();
 const localMatrix = new THREE.Matrix4();
+window.isDebug = false
 
 
 export default () => {  
+    if(window.isDebug) debugger
 
     const app = useApp();
+    window.heli = app
     const physics = usePhysics();
+    window.physics = physics;
     const physicsIds = [];
 
     let vehicleObj;
@@ -51,6 +55,7 @@ export default () => {
     document.addEventListener("keydown", onDocumentKeyDown, false);
     document.addEventListener('keyup', onDocumentKeyUp);
     function onDocumentKeyDown(event) {
+        if(window.isDebug) debugger
         var keyCode = event.which;
         if (keyCode == 87) { // W 
             keyW = true;
@@ -78,6 +83,7 @@ export default () => {
         }
     };
     function onDocumentKeyUp(event) {
+        if(window.isDebug) debugger
         var keyCode = event.which;
         if (keyCode == 87) { // W 
             keyW = false;
@@ -106,12 +112,13 @@ export default () => {
     };
 
     const _unwear = () => {
+      if(window.isDebug) debugger
       const localPlayer = useLocalPlayer();
       if (sitSpec) {
         const sitAction = localPlayer.getAction('sit');
         if (sitAction) {
           localPlayer.removeAction('sit');
-          localPlayer.avatar.app.visible = true;
+          // localPlayer.avatar.app.visible = true;
           physics.setCharacterControllerPosition(localPlayer.characterController, app.position);
           sitSpec = null;
         }
@@ -119,6 +126,7 @@ export default () => {
     };
 
     const loadModel = ( params ) => {
+        if(window.isDebug) debugger
 
         return new Promise( ( resolve, reject ) => {
                 
@@ -129,11 +137,12 @@ export default () => {
         })
     }
 
-    let p1 = loadModel( { filePath: baseUrl, fileName: 'flying-machine.glb', pos: { x: 0, y: 0, z: 0 } } ).then( result => { vehicleObj = result } );
+    let p1 = loadModel( { filePath: baseUrl, fileName: 'flying-machine.glb', pos: { x: 10, y: 10, z: 0 } } ).then( result => { vehicleObj = result } );
 
     let loadPromisesArr = [ p1 ];
 
     Promise.all( loadPromisesArr ).then( models => {
+        if(window.isDebug) debugger
 
         app.add( vehicleObj );
 
@@ -148,6 +157,18 @@ export default () => {
     });
 
     useFrame(( { timeDiff } ) => {
+      if(window.isDebug) debugger
+
+      if(window.app){
+        app.updateMatrixWorld();
+        if(window.heli){
+          heli.physicsObjects[0].position.copy(heli.position)
+          heli.physicsObjects[0].rotation.copy(heli.rotation)
+          heli.physicsObjects[0].quaternion.copy(heli.quaternion)
+          heli.physicsObjects[0].scale.copy(heli.scale)
+          physicsManager.setTransform(heli.physicsObjects[0])
+        }
+      }
 
       const _updateRide = () => {
       if (sitSpec && localPlayer.avatar) {
@@ -157,8 +178,10 @@ export default () => {
         if(sitSpec.mountType) {
           if(sitSpec.mountType === "flying") {
             vehicle = app.physicsObjects[0];
-            localPlayer.avatar.app.visible = false;
-            physics.enablePhysicsObject(vehicle);
+            window.vehicle = vehicle;
+            // localPlayer.avatar.app.visible = false;
+            // physics.enablePhysicsObject(vehicle);
+            physics.enableGeometry(vehicle.physicsId);
             let quat = new THREE.Quaternion(vehicle.quaternion.x, vehicle.quaternion.y, vehicle.quaternion.z, vehicle.quaternion.w);
             let right = new THREE.Vector3(1, 0, 0).applyQuaternion(quat);
             let globalUp = new THREE.Vector3(0, 1, 0);
@@ -274,6 +297,7 @@ export default () => {
     });
 
     useActivate(() => {
+      if(window.isDebug) debugger
 
       sitSpec = app.getComponent('sit');
       if (sitSpec) {
@@ -297,6 +321,7 @@ export default () => {
     });
 
     useCleanup(() => {
+      if(window.isDebug) debugger
       for (const physicsId of physicsIds) {
        physics.removeGeometry(physicsId);
       }
