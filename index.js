@@ -160,6 +160,7 @@ export default () => {
         if(sitSpec.mountType) {
           if(sitSpec.mountType === "flying") {
             vehicle = app.physicsObjects[0];
+            vehicle.detached = true;
             localPlayer.avatar.app.visible = false;
             physics.enableGeometry(vehicle);
             let quat = new THREE.Quaternion(vehicle.quaternion.x, vehicle.quaternion.y, vehicle.quaternion.z, vehicle.quaternion.w);
