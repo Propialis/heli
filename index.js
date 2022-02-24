@@ -23,6 +23,7 @@ export default () => {
     const app = useApp();
     const physics = usePhysics();
     const physicsIds = [];
+    const localPlayer = useLocalPlayer();
 
     let vehicleObj;
 
@@ -106,7 +107,6 @@ export default () => {
     };
 
     const _unwear = () => {
-      const localPlayer = useLocalPlayer();
       if (sitSpec) {
         const sitAction = localPlayer.getAction('sit');
         if (sitAction) {
@@ -156,7 +156,6 @@ export default () => {
       const _updateRide = () => {
       if (sitSpec && localPlayer.avatar) {
         const {instanceId} = app;
-        const localPlayer = useLocalPlayer();
 
         if(sitSpec.mountType) {
           if(sitSpec.mountType === "flying") {
@@ -287,7 +286,6 @@ export default () => {
         let rideMesh = null;
 
         const {instanceId} = app;
-        const localPlayer = useLocalPlayer();
 
         const rideBone = sitSpec.sitBone ? rideMesh.skeleton.bones.find(bone => bone.name === sitSpec.sitBone) : null;
         const sitAction = {
