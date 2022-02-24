@@ -147,7 +147,7 @@ export default () => {
 
         app.updateMatrixWorld()
         app.physicsObjects[0].position.copy(app.position)
-        physicsManager.setTransform(app.physicsObjects[0])
+        physics.setTransform(app.physicsObjects[0])
 
     });
 
@@ -280,7 +280,7 @@ export default () => {
     useActivate(() => {
 
       app.physicsObjects[0].rotation.set(0,0,0)
-      physicsManager.setTransform(app.physicsObjects[0])
+      physics.setTransform(app.physicsObjects[0])
 
       sitSpec = app.getComponent('sit');
       if (sitSpec) {
