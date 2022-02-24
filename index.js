@@ -16,12 +16,15 @@ const localQuaternion2 = new THREE.Quaternion();
 const localQuaternion3 = new THREE.Quaternion();
 const localEuler = new THREE.Euler();
 const localMatrix = new THREE.Matrix4();
+window.isDebug = false
 
 
 export default () => {  
 
     const app = useApp();
+    window.heli = app
     const physics = usePhysics();
+    window.physics = physics;
     const physicsIds = [];
     const localPlayer = useLocalPlayer();
 
@@ -160,6 +163,7 @@ export default () => {
         if(sitSpec.mountType) {
           if(sitSpec.mountType === "flying") {
             vehicle = app.physicsObjects[0];
+            window.vehicle = vehicle;
             localPlayer.avatar.app.visible = false;
             physics.enableGeometry(vehicle);
             let quat = new THREE.Quaternion(vehicle.quaternion.x, vehicle.quaternion.y, vehicle.quaternion.z, vehicle.quaternion.w);
