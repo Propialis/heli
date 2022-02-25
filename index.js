@@ -16,15 +16,12 @@ const localQuaternion2 = new THREE.Quaternion();
 const localQuaternion3 = new THREE.Quaternion();
 const localEuler = new THREE.Euler();
 const localMatrix = new THREE.Matrix4();
-window.isDebug = false
 
 
 export default () => {  
 
     const app = useApp();
-    window.heli = app
     const physics = usePhysics();
-    window.physics = physics;
     const physicsIds = [];
     const localPlayer = useLocalPlayer();
 
@@ -147,7 +144,6 @@ export default () => {
         physicsIds.push(physicsId);
         
         vehicle = app.physicsObjects[0];
-        window.vehicle = vehicle;
         vehicle.detached = true;
 
         vehicle.position.copy(app.position)
@@ -158,111 +154,111 @@ export default () => {
     useFrame(( { timeDiff } ) => {
 
       const _updateRide = () => {
-        if (sitSpec && localPlayer.avatar) {
-          const {instanceId} = app;
+      if (sitSpec && localPlayer.avatar) {
+        const {instanceId} = app;
 
-          if(sitSpec.mountType) {
-            if(sitSpec.mountType === "flying") {
-              // localPlayer.avatar.app.visible = false;
-              physics.enableGeometry(vehicle);
-              let quat = new THREE.Quaternion(vehicle.quaternion.x, vehicle.quaternion.y, vehicle.quaternion.z, vehicle.quaternion.w);
-              let right = new THREE.Vector3(1, 0, 0).applyQuaternion(quat);
-              let globalUp = new THREE.Vector3(0, 1, 0);
-              let up = new THREE.Vector3(0, 1, 0).applyQuaternion(quat);
-              let forward = new THREE.Vector3(0, 0, 1).applyQuaternion(quat);
+        if(sitSpec.mountType) {
+          if(sitSpec.mountType === "flying") {
+            // localPlayer.avatar.app.visible = false;
+            physics.enableGeometry(vehicle);
+            let quat = new THREE.Quaternion(vehicle.quaternion.x, vehicle.quaternion.y, vehicle.quaternion.z, vehicle.quaternion.w);
+            let right = new THREE.Vector3(1, 0, 0).applyQuaternion(quat);
+            let globalUp = new THREE.Vector3(0, 1, 0);
+            let up = new THREE.Vector3(0, 1, 0).applyQuaternion(quat);
+            let forward = new THREE.Vector3(0, 0, 1).applyQuaternion(quat);
 
-              let propSpec = app.getComponent("propeller");
-              if(propSpec) {
-                app.traverse(o => {
-                  // Find propeller obj
-                  if(o.name === propSpec.name) { rotor = o; }
-                });
-              }
-              enginePower = 1;
+            let propSpec = app.getComponent("propeller");
+            if(propSpec) {
+              app.traverse(o => {
+                // Find propeller obj
+                if(o.name === propSpec.name) { rotor = o; }
+              });
+            }
+            enginePower = 1;
 
-              // IO
-              if(keyShift) {
-                velocity.x += up.x * powerFactor * enginePower;
-                velocity.y += up.y * powerFactor * enginePower;
-                velocity.z += up.z * powerFactor * enginePower;
-              }
-              if (keyC) {
-                velocity.x -= up.x * powerFactor * enginePower;
-                velocity.y -= up.y * powerFactor * enginePower;
-                velocity.z -= up.z * powerFactor * enginePower;
-              }
-              if(keyQ) {
-                angularVelocity.x += up.x * powerFactor/2 * enginePower;
-                angularVelocity.y += up.y * powerFactor/2 * enginePower
-                angularVelocity.z += up.z * powerFactor/2 * enginePower;
-              }
-              if (keyE) {
-                angularVelocity.x -= up.x * powerFactor/2 * enginePower;
-                angularVelocity.y -= up.y * powerFactor/2 * enginePower;
-                angularVelocity.z -= up.z * powerFactor/2 * enginePower;
-              }
-              if(keyW) {
-                angularVelocity.x += right.x * powerFactor/2 * enginePower;
-                angularVelocity.y += right.y * powerFactor/2 * enginePower;
-                angularVelocity.z += right.z * powerFactor/2 * enginePower;
-              }
-              if (keyS) {
-                angularVelocity.x -= right.x * powerFactor/2 * enginePower;
-                angularVelocity.y -= right.y * powerFactor/2 * enginePower;
-                angularVelocity.z -= right.z * powerFactor/2 * enginePower;
-              }
-              if(keyA) {
-                angularVelocity.x -= forward.x * powerFactor/2 * enginePower;
-                angularVelocity.y -= forward.y * powerFactor/2 * enginePower;
-                angularVelocity.z -= forward.z * powerFactor/2 * enginePower;
-              }
-              if (keyD) {
-                angularVelocity.x += forward.x * powerFactor/2 * enginePower;
-                angularVelocity.y += forward.y * powerFactor/2 * enginePower;
-                angularVelocity.z += forward.z * powerFactor/2 * enginePower;
-              }
-              let gravity = new THREE.Vector3(0, -9.81, 0);
-              let gravityCompensation = new THREE.Vector3(-gravity.x, -gravity.y, -gravity.z).length();
-              gravityCompensation *= timeDiff/1000;
-              gravityCompensation *= 0.98;
-              let dot = globalUp.dot(up);
-              gravityCompensation *= Math.sqrt(THREE.MathUtils.clamp(dot, 0, 1));
+            // IO
+            if(keyShift) {
+              velocity.x += up.x * powerFactor * enginePower;
+              velocity.y += up.y * powerFactor * enginePower;
+              velocity.z += up.z * powerFactor * enginePower;
+            }
+            if (keyC) {
+              velocity.x -= up.x * powerFactor * enginePower;
+              velocity.y -= up.y * powerFactor * enginePower;
+              velocity.z -= up.z * powerFactor * enginePower;
+            }
+            if(keyQ) {
+              angularVelocity.x += up.x * powerFactor/2 * enginePower;
+              angularVelocity.y += up.y * powerFactor/2 * enginePower
+              angularVelocity.z += up.z * powerFactor/2 * enginePower;
+            }
+            if (keyE) {
+              angularVelocity.x -= up.x * powerFactor/2 * enginePower;
+              angularVelocity.y -= up.y * powerFactor/2 * enginePower;
+              angularVelocity.z -= up.z * powerFactor/2 * enginePower;
+            }
+            if(keyW) {
+              angularVelocity.x += right.x * powerFactor/2 * enginePower;
+              angularVelocity.y += right.y * powerFactor/2 * enginePower;
+              angularVelocity.z += right.z * powerFactor/2 * enginePower;
+            }
+            if (keyS) {
+              angularVelocity.x -= right.x * powerFactor/2 * enginePower;
+              angularVelocity.y -= right.y * powerFactor/2 * enginePower;
+              angularVelocity.z -= right.z * powerFactor/2 * enginePower;
+            }
+            if(keyA) {
+              angularVelocity.x -= forward.x * powerFactor/2 * enginePower;
+              angularVelocity.y -= forward.y * powerFactor/2 * enginePower;
+              angularVelocity.z -= forward.z * powerFactor/2 * enginePower;
+            }
+            if (keyD) {
+              angularVelocity.x += forward.x * powerFactor/2 * enginePower;
+              angularVelocity.y += forward.y * powerFactor/2 * enginePower;
+              angularVelocity.z += forward.z * powerFactor/2 * enginePower;
+            }
+            let gravity = new THREE.Vector3(0, -9.81, 0);
+            let gravityCompensation = new THREE.Vector3(-gravity.x, -gravity.y, -gravity.z).length();
+            gravityCompensation *= timeDiff/1000;
+            gravityCompensation *= 0.98;
+            let dot = globalUp.dot(up);
+            gravityCompensation *= Math.sqrt(THREE.MathUtils.clamp(dot, 0, 1));
 
-              let vertDamping = new THREE.Vector3(0, velocity.y, 0).multiplyScalar(-0.01);
-              let vertStab = up.clone();
-              vertStab.multiplyScalar(gravityCompensation);
-              vertStab.add(vertDamping);
-              vertStab.multiplyScalar(enginePower);
+            let vertDamping = new THREE.Vector3(0, velocity.y, 0).multiplyScalar(-0.01);
+            let vertStab = up.clone();
+            vertStab.multiplyScalar(gravityCompensation);
+            vertStab.add(vertDamping);
+            vertStab.multiplyScalar(enginePower);
 
-              // Fake gravity
-              localVector.copy(new THREE.Vector3(0,-9.81, 0)).multiplyScalar(timeDiff/1000);
-              velocity.add(localVector);
+            // Fake gravity
+            localVector.copy(new THREE.Vector3(0,-9.81, 0)).multiplyScalar(timeDiff/1000);
+            velocity.add(localVector);
 
-              velocity.add(vertStab);
+            velocity.add(vertStab);
 
-              // Positional damping
-              velocity.x *= THREE.MathUtils.lerp(1, 0.995, enginePower);
-              velocity.z *= THREE.MathUtils.lerp(1, 0.995, enginePower);
+            // Positional damping
+            velocity.x *= THREE.MathUtils.lerp(1, 0.995, enginePower);
+            velocity.z *= THREE.MathUtils.lerp(1, 0.995, enginePower);
 
-              //Stabilization
-              let rotStabVelocity = new THREE.Quaternion().setFromUnitVectors(up, globalUp);
-              rotStabVelocity.x *= 0.3;
-              rotStabVelocity.y *= 0.3;
-              rotStabVelocity.z *= 0.3;
-              rotStabVelocity.w *= 0.3;
-              let rotStabEuler = new THREE.Euler().setFromQuaternion(rotStabVelocity);
-              
-              angularVelocity.x += rotStabEuler.x * enginePower / damping;
-              angularVelocity.y += rotStabEuler.y * enginePower/ damping;
-              angularVelocity.z += rotStabEuler.z * enginePower/ damping;
+            //Stabilization
+            let rotStabVelocity = new THREE.Quaternion().setFromUnitVectors(up, globalUp);
+            rotStabVelocity.x *= 0.3;
+            rotStabVelocity.y *= 0.3;
+            rotStabVelocity.z *= 0.3;
+            rotStabVelocity.w *= 0.3;
+            let rotStabEuler = new THREE.Euler().setFromQuaternion(rotStabVelocity);
+            
+            angularVelocity.x += rotStabEuler.x * enginePower / damping;
+            angularVelocity.y += rotStabEuler.y * enginePower/ damping;
+            angularVelocity.z += rotStabEuler.z * enginePower/ damping;
 
-              angularVelocity.x *= 0.97;
-              angularVelocity.y *= 0.97;
-              angularVelocity.z *= 0.97;
+            angularVelocity.x *= 0.97;
+            angularVelocity.y *= 0.97;
+            angularVelocity.z *= 0.97;
 
-              //Applying velocities
-              physics.setVelocity(vehicle, velocity, false);
-              physics.setAngularVelocity(vehicle, angularVelocity, false);
+            //Applying velocities
+            physics.setVelocity(vehicle, velocity, false);
+            physics.setAngularVelocity(vehicle, angularVelocity, false);
 
             //Applying physics transform to app
             vehicle.updateMatrixWorld();
@@ -280,8 +276,8 @@ export default () => {
           app.updateMatrixWorld();
         }
       }
-      };
-      _updateRide();
+    };
+    _updateRide();
 
     });
 
