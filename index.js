@@ -62,6 +62,9 @@ export default () => {
         vehicle = app.physicsObjects[0];
         window.vehicle = vehicle; // test
         vehicle.detached = true;
+
+        vehicle.position.copy(app.position)
+        physics.setTransform(vehicle);
     });
 
     useFrame(( { timeDiff } ) => {
