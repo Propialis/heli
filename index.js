@@ -52,8 +52,6 @@ export default () => {
     let keyE = false;
     let keyC = false;
 
-    document.addEventListener("keydown", onDocumentKeyDown, false);
-    document.addEventListener('keyup', onDocumentKeyUp);
     function onDocumentKeyDown(event) {
         var keyCode = event.which;
         if (keyCode == 87) { // W 
@@ -114,8 +112,8 @@ export default () => {
         const sitAction = localPlayer.getAction('sit');
         if (sitAction) {
           localPlayer.removeAction('sit');
-          localPlayer.avatar.app.visible = true;
-          physics.setCharacterControllerPosition(localPlayer.characterController, app.position);
+          // localPlayer.avatar.app.visible = true;
+          // physics.setCharacterControllerPosition(localPlayer.characterController, app.position);
           sitSpec = null;
         }
       }
@@ -165,7 +163,7 @@ export default () => {
 
           if(sitSpec.mountType) {
             if(sitSpec.mountType === "flying") {
-              localPlayer.avatar.app.visible = false;
+              // localPlayer.avatar.app.visible = false;
               physics.enableGeometry(vehicle);
               let quat = new THREE.Quaternion(vehicle.quaternion.x, vehicle.quaternion.y, vehicle.quaternion.z, vehicle.quaternion.w);
               let right = new THREE.Vector3(1, 0, 0).applyQuaternion(quat);
@@ -301,6 +299,17 @@ export default () => {
         app.wear(false);
       }
     
+    });
+
+    app.addEventListener('wearupdate', e => {
+      if(e.wear) {
+        document.addEventListener("keydown", onDocumentKeyDown, false);
+        document.addEventListener('keyup', onDocumentKeyUp);
+      } else {
+        document.removeEventListener("keydown", onDocumentKeyDown, false);
+        document.removeEventListener('keyup', onDocumentKeyUp);
+        _unwear();
+      }
     });
 
     useCleanup(() => {
