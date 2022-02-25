@@ -152,6 +152,9 @@ export default () => {
         window.vehicle = vehicle;
         vehicle.detached = true;
 
+        vehicle.position.copy(app.position)
+        physics.setTransform(vehicle);
+
     });
 
     useFrame(( { timeDiff } ) => {
