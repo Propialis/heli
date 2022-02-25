@@ -298,7 +298,7 @@ export default () => {
           controllingBone: rideBone,
         };
         localPlayer.setControlAction(sitAction);
-        app.wear();
+        app.wear(false);
       }
     
     });
