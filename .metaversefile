@@ -18,7 +18,7 @@
     {
       "key": "propeller",
       "value": {
-        "name": "Prop",
+        "name": "Rotor",
         "maxSpeed": 0.5
       }
     },

@@ -130,10 +130,9 @@ export default () => {
         })
     }
 
-    // const modelName = 'flying-machine.glb';
-    const modelName = 'copter_variant1_v1_vian.glb';
-    // const modelName = 'copter_variant2_v1_vian.glb';
-    // const modelName = 'copter_variant3_v1_vian.glb';
+    const modelName = 'copter_var1_v2_vian.glb';
+    // const modelName = 'copter_var2_v2_vian.glb';
+    // const modelName = 'copter_var3_v2_vian.glb';
     let p1 = loadModel( { filePath: baseUrl, fileName: modelName, pos: { x: 0, y: 0, z: 0 } } ).then( result => { vehicleObj = result } );
 
     let loadPromisesArr = [ p1 ];
@@ -268,7 +267,7 @@ export default () => {
               physics.setVelocity(vehicle, velocity, false);
               physics.setAngularVelocity(vehicle, angularVelocity, false);
 
-              if (rotor) { rotor.rotateZ(enginePower * 10); }
+              if (rotor) { rotor.rotateY(enginePower * 10); }
             }
           }
         }
