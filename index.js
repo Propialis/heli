@@ -276,7 +276,7 @@ export default () => {
           app.position.copy(vehicle.position);
           app.quaternion.copy(vehicle.quaternion);
           app.updateMatrixWorld();
-          localPlayer.avatar.object.scene.children[0].children[0].quaternion.copy(vehicle.quaternion);
+          // localPlayer.avatar.object.scene.children[0].children[0].quaternion.copy(vehicle.quaternion);
         }
       };
       _updateRide();
