@@ -130,7 +130,7 @@ export default () => {
         })
     }
 
-    const modelName = 'copter_var1_v2_vian.glb';
+    const modelName = 'flying-machine.glb';
     // const modelName = 'copter_var2_v2_vian.glb';
     // const modelName = 'copter_var3_v2_vian.glb';
     let p1 = loadModel( { filePath: baseUrl, fileName: modelName, pos: { x: 0, y: 0, z: 0 } } ).then( result => { vehicleObj = result } );
